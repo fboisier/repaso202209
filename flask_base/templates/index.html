@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block titulo %}Pensamientos{% endblock %}
+{% block contenido %}
+
+
+{% include '_menu.html' %}
+
+<div class="container mt-5">
+    <h1>Pensamientos</h1>
+
+    <form action="/procesar_pensamiento" method="post">
+
+        <div class="row">
+            <div class="col-10">
+                <div class="mb-3">
+                    <input type="text" name="texto" class="form-control" id="pensamiento" aria-describedby="pensamientoHelp" placeholder="Ingresa Un Pensamiento Aquí">
+                </div>
+            </div>
+            <div class="col-2">
+                <button type="submit" class="btn btn-success">Agregar Pensamiento</button>
+            </div>
+        </div>
+
+        <div>
+            {% for pensamiento in pensamientos %}
+                <div class="row mt-3">
+                    <div class="col-2">
+                        <a href="/usuarios/{{pensamiento.usuario_creador}}">{{pensamiento.nombre_usuario}} dice:</a>
+                    </div>            
+                    <div class="col-8">
+                        <div class="alert alert-info" role="alert">
+                            {{pensamiento.texto}}
+                        </div>
+                        <a class="btn btn-primary" href="/procesar_megusta/{{pensamiento.id}}"><i class="fa fa-thumbs-up" aria-hidden="true"></i> ME GUSTA</a>
+                        <a class="btn btn-warning" href="/procesar_no_megusta/{{pensamiento.id}}"><i class="fa fa-thumbs-down" aria-hidden="true"></i> NO ME GUSTA</a>
+                        <p>CANTIDAD:{{pensamiento.numero_likes}}</p>
+                    </div>            
+                    <div class="col-2">
+                        {% if session.usuario_id == pensamiento.usuario_creador%}
+                            <a class="btn btn-danger" href="/eliminar/pensamiento/{{pensamiento.id}}">Eliminar</a>
+                        {% endif %}
+                    </div>            
+                </div>            
+            {% endfor %}
+        </div>
+
+
+    </form>
+
+
+</div>
+
+
+{% endblock %}
